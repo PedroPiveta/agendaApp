@@ -50,7 +50,7 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6502e27c-5886-49ae-b424-9d2ab6981012",
+                            Id = "79e8e703-124a-47c4-b943-35fdae6cd369",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -177,8 +177,9 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DiasSemana")
-                        .HasColumnType("int");
+                    b.Property<string>("DiasSemana")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsRecurrent")
                         .HasColumnType("tinyint(1)");
@@ -187,10 +188,13 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("activities");
                 });
@@ -259,21 +263,6 @@ namespace api.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("api.Models.UserActivity", b =>
-                {
-                    b.Property<string>("UserId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "ActivityId");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("UserActivities");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -325,33 +314,20 @@ namespace api.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("api.Models.UserActivity", b =>
+            modelBuilder.Entity("api.Models.Activity", b =>
                 {
-                    b.HasOne("api.Models.Activity", "Activity")
-                        .WithMany("UserActivities")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("api.Models.AppUser", "User")
-                        .WithMany("UserActivities")
+                        .WithMany("Activities")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Activity");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("api.Models.Activity", b =>
-                {
-                    b.Navigation("UserActivities");
                 });
 
             modelBuilder.Entity("api.Models.AppUser", b =>
                 {
-                    b.Navigation("UserActivities");
+                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }

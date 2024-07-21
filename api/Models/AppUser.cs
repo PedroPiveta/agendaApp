@@ -8,6 +8,6 @@ namespace api.Models
 {
     public class AppUser : IdentityUser
     {
-        public ICollection<UserActivity> UserActivities { get; set; }
+        public List<Activity> Activities { get; set; } = new List<Activity>();
     }
 }

@@ -3,6 +3,7 @@ using api.Data;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Repositories;
 using api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -54,7 +55,7 @@ builder.Services.AddAuthentication(options => {
 });
 
 // Add services to the container.
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -93,7 +94,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options => {
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
-
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

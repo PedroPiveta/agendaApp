@@ -18,24 +18,10 @@ namespace api.Data
         }
 
         public DbSet<Models.Activity> Activities { get; set; }
-        public DbSet<UserActivity> UserActivities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<UserActivity>()
-                .HasKey(ua => new { ua.UserId, ua.ActivityId });
-
-            modelBuilder.Entity<UserActivity>()
-                .HasOne(ua => ua.User)
-                .WithMany(u => u.UserActivities)
-                .HasForeignKey(ua => ua.UserId);
-
-            modelBuilder.Entity<UserActivity>()
-                .HasOne(ua => ua.Activity)
-                .WithMany(a => a.UserActivities)
-                .HasForeignKey(ua => ua.ActivityId);
 
             List<IdentityRole> roles = new List<IdentityRole>
             {
