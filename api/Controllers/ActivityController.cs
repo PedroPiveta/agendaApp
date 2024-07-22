@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Dtos;
+using api.Dtos.Activity;
 using api.Extensions;
 using api.Interfaces;
 using api.Models;
@@ -34,7 +35,8 @@ namespace api.Controllers
         public async Task<IActionResult> GetUserActivities()
         {
             var UserName = User.GetUsername();
-            var appUser =  await _userManager.FindByNameAsync(UserName);
+            var appUser = await _userManager.FindByNameAsync(UserName);
+
             if (appUser == null)
             {
                 return Unauthorized();
@@ -49,6 +51,34 @@ namespace api.Controllers
             var activitiesDto = _mapper.Map<List<GetActivityDto>>(activities);
             
             return Ok(activitiesDto);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> CreateActivity([FromBody] CreateActivityDto activityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var UserName = User.GetUsername();
+            var appUser = await _userManager.FindByNameAsync(UserName);
+            Console.WriteLine(appUser?.Id);
+            if (string.IsNullOrEmpty(appUser?.Id))
+            {
+                return Unauthorized("User ID not found.");
+            }
+            if (appUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var createdActivity = await _activityRepository.CreateAsync(activityDto, appUser.Id);
+
+            var createdActivityDto = _mapper.Map<GetActivityDto>(createdActivity);
+
+            return CreatedAtAction(nameof(GetUserActivities), new { id = createdActivityDto.Id }, createdActivityDto);
         }
     }
 }

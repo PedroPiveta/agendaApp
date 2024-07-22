@@ -11,10 +11,8 @@ namespace api.Interfaces
     {
         Task<List<Activity>> GetAllAsync(AppUser user);
         Task<Activity> GetByIdAsync(int id);
-        Task<Activity> CreateAsync(CreateActivityDto activity);
+        Task<Activity> CreateAsync(CreateActivityDto activity, string userId);
         Task<Activity?> UpdateAsync(UpdateActivityDto activity);
         Task<Activity?> DeleteAsync(int id);
-
-
     }
 }

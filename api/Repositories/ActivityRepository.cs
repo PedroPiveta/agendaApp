@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
 using api.Dtos.Activity;
+using api.Enums;
 using api.Interfaces;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +19,25 @@ namespace api.Repositories
             _context = context;
         }
 
-        public Task<Activity> CreateAsync(CreateActivityDto activity)
+        public async Task<Activity> CreateAsync(CreateActivityDto activityDto, string id)
         {
-            throw new NotImplementedException();
+            var activity = new Activity
+            {
+                Title = activityDto.Title,
+                Description = activityDto.Description,
+                ActivityDatetime = activityDto.ActivityDatetime,
+                IsRecurrent = activityDto.IsRecurrent,
+                UserId = id,
+                DiasSemana = activityDto.DiasSemana.Select(day => Enum.Parse<DiasSemana>(day)).ToList()
+            };
+
+            var createdActivity = await _context.Activities.AddAsync(activity);
+            
+            await _context.SaveChangesAsync();
+            
+            return createdActivity.Entity;
         }
+
 
         public Task<Activity?> DeleteAsync(int id)
         {

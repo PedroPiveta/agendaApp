@@ -23,6 +23,11 @@ namespace api.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Activity>()
+            .HasOne(a => a.User)
+            .WithMany()
+            .HasForeignKey(a => a.UserId);
+
             List<IdentityRole> roles = new List<IdentityRole>
             {
                 new IdentityRole { Name = "User", NormalizedName = "USER" }

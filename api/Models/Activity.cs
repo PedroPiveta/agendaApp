@@ -22,6 +22,6 @@ namespace api.Models
         public bool IsRecurrent { get; set; }
         public List<DiasSemana>? DiasSemana { get; set; } = new List<DiasSemana>();
         public string UserId { get; set; } = string.Empty;
-        public AppUser User { get; set; } = new AppUser();
+        public AppUser? User { get; set; }
     }
 }

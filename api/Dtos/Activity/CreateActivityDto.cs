@@ -13,6 +13,7 @@ namespace api.Dtos.Activity
         public string Description { get; set; } = string.Empty;
         public DateTime? ActivityDatetime { get; set; } = null;
         public bool IsRecurrent { get; set; }
+        // public string UserId { get; set; } = string.Empty;
         public List<string> DiasSemana { get; set; } = new List<string>();    
     }
 }
