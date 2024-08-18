@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,11 +10,14 @@ namespace api.Dtos.Activity
     public class CreateActivityDto
     {
         [Required]
-        public string Title { get; set; } = string.Empty;        
+        public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime? ActivityDatetime { get; set; } = null;
-        public bool IsRecurrent { get; set; }
-        // public string UserId { get; set; } = string.Empty;
-        public List<string> DiasSemana { get; set; } = new List<string>();    
+        [Required]
+        [DefaultValue(false)]
+        public bool IsRecurrent { get; set; } = false;
+        [DefaultValue(false)]
+        public bool? IsAnnual { get; set; } = false;
+        public List<string> DiasSemana { get; set; } = new List<string>();
     }
 }

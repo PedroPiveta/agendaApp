@@ -14,12 +14,11 @@ namespace api.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime? ActivityDatetime { get; set; } = new DateTime();
-        [Required]
-        public bool IsRecurrent { get; set; }
+        public bool IsRecurrent { get; set; } = false;
+        public bool? IsAnnual { get; set; } = false;
         public List<DiasSemana>? DiasSemana { get; set; } = new List<DiasSemana>();
         public string UserId { get; set; } = string.Empty;
         public AppUser? User { get; set; }

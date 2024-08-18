@@ -50,7 +50,7 @@ namespace api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "de55cc8b-a848-4bab-b4f1-e49fabf7437e",
+                            Id = "0f6db94c-f26a-4d05-a91f-f149670efac6",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -182,6 +182,9 @@ namespace api.Migrations
 
                     b.Property<string>("DiasSemana")
                         .HasColumnType("longtext");
+
+                    b.Property<bool?>("IsAnnual")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<bool>("IsRecurrent")
                         .HasColumnType("tinyint(1)");

@@ -10,7 +10,6 @@ using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace api.Controllers
 {
@@ -64,7 +63,7 @@ namespace api.Controllers
 
             var UserName = User.GetUsername();
             var appUser = await _userManager.FindByNameAsync(UserName);
-            Console.WriteLine(appUser?.Id);
+            
             if (string.IsNullOrEmpty(appUser?.Id))
             {
                 return Unauthorized("User ID not found.");
@@ -79,6 +78,43 @@ namespace api.Controllers
             var createdActivityDto = _mapper.Map<GetActivityDto>(createdActivity);
 
             return CreatedAtAction(nameof(GetUserActivities), new { id = createdActivityDto.Id }, createdActivityDto);
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<IActionResult> UpdateActivity([FromBody] UpdateActivityDto activityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updatedActivity = await _activityRepository.UpdateAsync(activityDto);
+
+            if (updatedActivity == null)
+            {
+                return NotFound();
+            }
+
+            var updatedActivityDto = _mapper.Map<GetActivityDto>(updatedActivity);
+
+            return Ok(updatedActivityDto);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteActivity(int id)
+        {
+            var deletedActivity = await _activityRepository.DeleteAsync(id);
+
+            if (deletedActivity == null)
+            {
+                return NotFound();
+            }
+
+            var deletedActivityDto = _mapper.Map<GetActivityDto>(deletedActivity);
+
+            return Ok(deletedActivityDto);
         }
     }
 }

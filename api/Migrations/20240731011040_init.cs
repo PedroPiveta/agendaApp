@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace api.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInit : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -106,14 +106,22 @@ namespace api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ActivityDatetime = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsRecurrent = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    DiasSemana = table.Column<string>(type: "longtext", nullable: false)
+                    IsAnnual = table.Column<bool>(type: "tinyint(1)", nullable: true),
+                    DiasSemana = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     UserId = table.Column<string>(type: "varchar(255)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    AppUserId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_activities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_activities_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_activities_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -228,7 +236,12 @@ namespace api.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "79e8e703-124a-47c4-b943-35fdae6cd369", null, "User", "USER" });
+                values: new object[] { "0f6db94c-f26a-4d05-a91f-f149670efac6", null, "User", "USER" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_activities_AppUserId",
+                table: "activities",
+                column: "AppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_activities_UserId",

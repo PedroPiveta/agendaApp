@@ -32,17 +32,28 @@ namespace api.Repositories
             };
 
             var createdActivity = await _context.Activities.AddAsync(activity);
-            
+
             await _context.SaveChangesAsync();
-            
+
             return createdActivity.Entity;
         }
 
 
-        public Task<Activity?> DeleteAsync(int id)
+        public async Task<Activity?> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var activity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == id);
+
+            if (activity == null)
+            {
+                return null;
+            }
+
+            _context.Activities.Remove(activity);
+            await _context.SaveChangesAsync();
+
+            return activity;
         }
+
 
         public async Task<List<Activity>> GetAllAsync(AppUser user)
         {
@@ -64,9 +75,24 @@ namespace api.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Activity?> UpdateAsync(UpdateActivityDto activity)
+        public async Task<Activity?> UpdateAsync(UpdateActivityDto activity)
         {
-            throw new NotImplementedException();
+            var oldActivity = await _context.Activities.FirstOrDefaultAsync(a => a.Id == activity.Id);
+
+            if (oldActivity == null)
+            {
+                return null;
+            }
+
+            oldActivity.Title = activity.Title;
+            oldActivity.Description = activity.Description;
+            oldActivity.ActivityDatetime = activity.ActivityDatetime;
+            oldActivity.IsRecurrent = activity.IsRecurrent;
+            oldActivity.DiasSemana = activity.DiasSemana.Select(day => Enum.Parse<DiasSemana>(day)).ToList();
+
+            await _context.SaveChangesAsync();
+
+            return oldActivity;
         }
     }
 }
