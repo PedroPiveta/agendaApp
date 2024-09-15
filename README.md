@@ -8,4 +8,4 @@ Este app é um desafio de um amigo
 - Dotnet
 
 ### Mobile
-- Provavelmente vou usar react native
+- Flutter
