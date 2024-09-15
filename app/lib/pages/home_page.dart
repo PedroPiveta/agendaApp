@@ -1,10 +1,9 @@
+import 'package:app/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final Function() logout;
-
-  const HomePage({super.key, required this.logout});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,6 +13,10 @@ class _HomePageState extends State<HomePage> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwtToken');
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
   }
 
   @override
@@ -24,9 +27,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            _logout().then((value) => widget.logout());
-          },
+          onPressed: _logout,
           child: const Text('Logout'),
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart';
 
 class LoginPage extends StatelessWidget {
-  final Function(String) onLogin;
+  final Function(String)? onLogin;
   final TextEditingController _userController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -38,7 +38,7 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-  LoginPage({super.key, required this.onLogin});
+  LoginPage({super.key, this.onLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -75,8 +75,8 @@ class LoginPage extends StatelessWidget {
               ElevatedButton(
                 onPressed: () async {
                   String token = await login();
-                  if (token.isNotEmpty) {
-                    onLogin(token);
+                  if (token.isNotEmpty && onLogin != null) {
+                    onLogin!(token) ;
                   } else {
                     // Mostrar mensagem de erro
                     print('Erro ao fazer login.');
