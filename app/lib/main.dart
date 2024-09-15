@@ -38,14 +38,6 @@ class _MyAppState extends State<MyApp> {
     return prefs.getString('jwtToken');
   }
 
-  void _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('jwtToken');
-    setState(() {
-      _jwtToken = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -58,14 +50,14 @@ class _MyAppState extends State<MyApp> {
               body: Center(child: CircularProgressIndicator()),
             );
           } else if (snapshot.hasData && snapshot.data != null) {
-            return HomePage(logout: _logout,);
+            return HomePage();
           } else {
             return LoginPage(onLogin: (token) async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               await prefs.setString('jwtToken', token);
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage(logout: _logout,)),
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             });
           }
