@@ -35,6 +35,13 @@ namespace api.Controllers
                     return BadRequest(ModelState);
                 }
 
+                var existingUser = await _userManager.FindByNameAsync(registerDto.UserName);
+                
+                if (existingUser != null)
+                {
+                    return Conflict("Um usuário com esse nome de usuário já existe.");
+                }
+
                 var appUser = new AppUser
                 {
                     UserName = registerDto.UserName,
@@ -56,13 +63,13 @@ namespace api.Controllers
                                 Token = _tokenService.CreateToken(appUser)
                             }
                         );
-                    } 
+                    }
                     else
                     {
                         return StatusCode(500, roleResult.Errors);
-                    } 
+                    }
                 }
-                else 
+                else
                 {
                     return StatusCode(500, createdUser.Errors);
                 }
